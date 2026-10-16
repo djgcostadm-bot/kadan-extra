@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diárias Extras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9EEEC; --surface:#FFFFFF; --surface2:#F4F7F6; --ink:#15232A; --muted:#566A70; --line:#D3DCD9;
+  --brand:#0E5E57; --brand-ink:#FFFFFF; --brand-soft:#D6EBE8; --gold:#C98A00; --wa:#168F52; --wa-ink:#fff;
+  --danger:#B42318; --rail:#9BA9A6;
+  --st-convidado:#8A6A00; --st-confirmado:#0E5E57; --st-recusado:#B42318; --st-realizado:#2F5BB7; --st-pago:#168F52; --st-cancelado:#8D989B;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1618; --surface:#172225; --surface2:#1C2A2E; --ink:#E4ECEA; --muted:#98A9AC; --line:#2B3B3F;
+    --brand:#46B8AB; --brand-ink:#06201D; --brand-soft:#16393A; --gold:#F0B429; --wa:#2FBF71; --wa-ink:#05200F;
+    --danger:#F0796E; --rail:#41545A;
+    --st-convidado:#E3B341; --st-confirmado:#46B8AB; --st-recusado:#F0796E; --st-realizado:#7EA2F0; --st-pago:#2FBF71; --st-cancelado:#6E7C80;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1618; --surface:#172225; --surface2:#1C2A2E; --ink:#E4ECEA; --muted:#98A9AC; --line:#2B3B3F;
+  --brand:#46B8AB; --brand-ink:#06201D; --brand-soft:#16393A; --gold:#F0B429; --wa:#2FBF71; --wa-ink:#05200F;
+  --danger:#F0796E; --rail:#41545A;
+  --st-convidado:#E3B341; --st-confirmado:#46B8AB; --st-recusado:#F0796E; --st-realizado:#7EA2F0; --st-pago:#2FBF71; --st-cancelado:#6E7C80;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.15}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:18px}
+.logo{display:flex;align-items:baseline;gap:10px}
+.logo h1{font-size:22px;letter-spacing:-.01em}
+.logo small{color:var(--muted);font-size:12px}
+.tabs{display:flex;gap:4px;margin-left:auto}
+.tabs button{border:0;background:transparent;padding:8px 14px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:600}
+.tabs button[aria-current="page"]{background:var(--ink);color:var(--bg)}
+.conn{font-size:12px;color:var(--muted);white-space:nowrap;cursor:pointer;max-width:45vw;overflow:hidden;text-overflow:ellipsis}
+
+main{max-width:1120px;margin:0 auto;padding:16px 16px 40px}
+.banner{background:var(--surface);border:1px dashed var(--gold);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:14px}
+.banner[hidden]{display:none}
+.vhead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:4px 0 14px;flex-wrap:wrap}
+.vhead h2{font-size:28px;letter-spacing:-.015em}
+.vhead p{margin:4px 0 0;color:var(--muted);max-width:60ch}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:12px}
+.fld{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fld>span{font-size:12px;color:var(--muted);font-weight:600}
+.fld.grow{flex:1 1 200px}
+input[type=text],input[type=search],input[type=tel],input[type=date],input[type=number],input[type=email],input[type=password],select,textarea{
+  background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 11px;min-height:40px;width:100%}
+textarea{resize:vertical;min-height:90px;line-height:1.45}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 14px;min-height:40px;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.btn.wa{background:var(--wa);color:var(--wa-ink);border-color:var(--wa)}
+.btn.danger{color:var(--danger);border-color:color-mix(in srgb,var(--danger) 40%,var(--line))}
+.btn.danger.armed{background:var(--danger);color:#fff;border-color:var(--danger)}
+.btn.sm{min-height:32px;padding:5px 10px;font-size:13px}
+.tgl[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#1d1400}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:9px 12px;min-height:40px;cursor:pointer;font-weight:600;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--ink);color:var(--bg)}
+
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin-bottom:6px;scrollbar-width:thin}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap;font-weight:600;font-size:14px}
+.chip b{font-weight:500;color:var(--muted);margin-left:4px;font-size:12px}
+.chip.on{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.chip.on b{color:inherit;opacity:.8}
+.meta{color:var(--muted);font-size:13px;margin:0}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.row1{display:flex;gap:10px;align-items:flex-start}
+.who{flex:1;min-width:0}
+.who h3{font-size:18px;overflow-wrap:anywhere}
+.star{border:0;background:transparent;cursor:pointer;font-size:22px;line-height:1;color:var(--line);padding:2px}
+.star.on{color:var(--gold)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:12px;padding:3px 8px;border-radius:6px;background:var(--surface2);border:1px solid var(--line);font-weight:600}
+.tag.hit{background:var(--brand-soft);border-color:var(--brand)}
+.foot{display:flex;align-items:center;gap:8px;margin-top:auto;flex-wrap:wrap}
+.foot .meta{margin-right:auto}
+.calls{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.calls .full{grid-column:1/-1}
+.ticket .calls{margin-top:6px}
+.btn.wa-out{color:var(--wa);border-color:var(--wa)}
+.pbtns{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--stc) 16%,transparent);color:var(--stc);white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--stc)}
+.warn{font-size:13px;color:var(--st-convidado);font-weight:600;margin:0}
+
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:28px 18px;text-align:center;color:var(--muted)}
+.empty .btn{margin-top:12px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat span{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.stat strong{font-family:var(--display);font-size:26px;display:block;margin-top:2px;letter-spacing:-.01em}
+.split{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media (min-width:900px){.split{grid-template-columns:minmax(0,1fr) 300px}.split aside{order:2}}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;align-self:start}
+.box h3{font-size:16px;margin-bottom:8px}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 4px;border-bottom:1px solid var(--line)}
+th{font-size:12px;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tfoot td{font-weight:700;border-bottom:0}
+
+.day{margin-bottom:22px}
+.rail{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.rail h3{font-size:17px;white-space:nowrap}
+.rail .bar{flex:1 1 40px;height:5px;border-radius:3px;background:var(--rail)}
+.tickets{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px 12px}
+.ticket{position:relative;background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;padding:16px 14px 12px;display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.ticket::before{content:"";position:absolute;left:-1px;right:-1px;top:-6px;height:8px;
+  background:radial-gradient(circle at 6px 0, transparent 4.5px, var(--stc) 5px) repeat-x;background-size:12px 8px}
+.ticket .th{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ticket .func{font-size:12px;font-weight:700;color:var(--stc)}
+.ticket .val{font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums}
+.ticket h4{font-size:18px;overflow-wrap:anywhere}
+.ticket .lines{display:flex;flex-direction:column;gap:1px}
+.ticket .acts{display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.ticket .acts select{min-height:32px;padding:4px 8px;font-size:13px;width:auto;flex:1 1 120px}
+.ticket.off{opacity:.62}
+.ticket.off h4{text-decoration:line-through}
+
+.hlist{display:flex;flex-direction:column;gap:6px}
+.hrow{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.hrow summary{list-style:none;cursor:pointer;padding:10px 12px;display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:4px 12px;align-items:center}
+.hrow summary::-webkit-details-marker{display:none}
+.hrow .d{font-variant-numeric:tabular-nums;font-weight:600;font-size:14px}
+.hrow .nm{min-width:0}
+.hrow .nm strong{display:block;overflow-wrap:anywhere}
+.hrow .rt{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.hrow .rt b{font-variant-numeric:tabular-nums}
+.log{border-top:1px solid var(--line);padding:10px 12px 12px;font-size:13px}
+.log ol{margin:0;padding-left:18px}
+.log li{margin:2px 0}
+.log time{color:var(--muted);font-variant-numeric:tabular-nums}
+
+.list{display:flex;flex-direction:column;gap:8px}
+.prow{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.prow .who{flex:1 1 200px}
+.prow .tags{flex:2 1 220px}
+.prow.inativo{opacity:.6}
+
+.form-sec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px}
+.form-sec h3{font-size:18px}
+.frow{display:grid;grid-template-columns:minmax(0,1fr) 120px 40px;gap:8px;align-items:center}
+.icon-x{border:1px solid var(--line);background:var(--surface);border-radius:8px;height:40px;cursor:pointer;color:var(--danger);font-size:18px}
+.ph{display:flex;flex-wrap:wrap;gap:6px}
+.preview{white-space:pre-wrap;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px}
+
+.ov{position:fixed;inset:0;background:rgba(5,15,18,.55);z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.ov[hidden]{display:none}
+.md{background:var(--bg);width:100%;max-width:560px;max-height:92%;overflow:auto;border-radius:16px 16px 0 0;padding:18px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+@media (min-width:640px){.ov{align-items:center;padding:20px}.md{border-radius:16px}}
+.md h2{font-size:22px;margin-bottom:2px}
+.md .sub{color:var(--muted);margin:0 0 14px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mgrid .full{grid-column:1/-1}
+.mact{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px}
+.mact .left{margin-right:auto}
+.check{display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--brand)}
+[hidden]{display:none!important}
+body.auth-out .top,body.auth-out main{display:none}
+.boot{min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--muted);margin:0}
+.login{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
+.lcard{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px 20px;display:flex;flex-direction:column;gap:12px}
+.lcard h1{font-size:28px;letter-spacing:-.015em}
+.lcard form{display:flex;flex-direction:column;gap:12px}
+.lerr{margin:0;font-size:14px;color:var(--danger);font-weight:600}
+.lerr.ok{color:var(--brand)}
+.llinks{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.lnk{border:0;background:none;color:var(--brand);font-weight:600;cursor:pointer;padding:6px 0;text-decoration:underline;font-size:14px}
+.urow{flex-wrap:wrap}
+.urow.inativo{opacity:.6}
+.uctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.uctl select{width:auto;min-height:36px;padding:5px 8px}
+.conn{border:0;background:transparent;font:inherit;font-size:12px}
+.star:disabled{cursor:default}
+a.btn{text-decoration:none;color:inherit}
+.rbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.bhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:16px 0 8px}
+.bhead h3{font-size:17px}
+.blist{display:flex;flex-direction:column;gap:6px}
+.brow{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px}
+.brow .who{flex:1;min-width:0;display:flex;flex-direction:column}
+.brow.ok{opacity:.72}
+.brow.ok strong::after{content:" ✓ enviado";color:var(--wa);font-size:12px}
+.prevbox summary{cursor:pointer;font-weight:600;font-size:14px;margin-top:12px}
+.prevbox .preview{margin-top:8px}
+.fchips{display:flex;flex-wrap:wrap;gap:6px}
+.savebar{display:none;position:sticky;bottom:12px;z-index:25;align-items:center;justify-content:space-between;gap:10px;background:var(--ink);color:var(--bg);border-radius:12px;padding:8px 8px 8px 14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.savebar.on{display:flex}
+@media (max-width:760px){.savebar{bottom:calc(72px + env(safe-area-inset-bottom,0px))}}
+.vhint{font-size:12px;color:var(--muted);line-height:1.35}
+.fobs{background:color-mix(in srgb,var(--gold) 14%,var(--surface));border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;margin:-4px 0 14px;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.fobs.card-obs{margin:0;font-size:13px;padding:7px 10px}
+.prow .fobs{flex-basis:100%;grid-column:1/-1}
+.vhint button{border:0;background:none;color:var(--brand);font-weight:700;padding:2px 0;cursor:pointer;text-decoration:underline;font-size:12px}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;z-index:60;max-width:90%;text-align:center}
+.toast[hidden]{display:none}
+
+.tabs svg{display:none}
+@media (max-width:760px){
+  input[type=text],input[type=search],input[type=tel],input[type=date],input[type=number],input[type=email],input[type=password],select,textarea{font-size:16px;min-height:44px}
+  input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;display:block}
+  .btn{min-height:44px}
+  .btn.sm{min-height:40px;font-size:14px;padding:6px 10px}
+  .top-in{padding:10px 14px;gap:10px}
+  .logo h1{font-size:19px}
+  .logo small{display:none}
+  .conn{margin-left:auto;font-size:11px}
+  .tabs{position:fixed;left:0;right:0;bottom:0;margin:0;background:var(--surface);border-top:1px solid var(--line);
+    padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(5,1fr);gap:2px;z-index:30}
+  .tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0 5px;font-size:11px;border-radius:10px;min-width:0}
+  .tabs svg{display:block;width:22px;height:22px}
+  .tabs button[aria-current="page"]{background:var(--brand-soft);color:var(--ink)}
+  main{padding:12px 12px calc(84px + env(safe-area-inset-bottom,0px))}
+  .vhead{margin:0 0 10px;align-items:stretch}
+  .vhead h2{font-size:22px}
+  .vhead p{font-size:14px}
+  .vhead>.btn{width:100%}
+  .toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .toolbar .grow,.toolbar .full{grid-column:1/-1}
+  .toolbar .check,.toolbar .tgl{align-self:end}
+  .seg button{flex:1}
+  .stats{grid-template-columns:1fr 1fr;gap:8px}
+  .stat{padding:10px 12px}
+  .stat strong{font-size:21px}
+  .split aside{order:2}
+  .grid,.tickets{grid-template-columns:1fr}
+  .card{padding:12px}
+  .rail h3{font-size:16px}
+  .ticket .acts{display:grid;grid-template-columns:1fr 1fr}
+  .ticket .acts select{grid-column:1/-1;min-height:44px;font-size:16px}
+  .prow{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 10px}
+  .prow .tags,.prow .pbtns{grid-column:1/-1}
+  .pbtns{display:grid;grid-template-columns:1fr 1.5fr 1fr}
+  .hrow summary{grid-template-columns:58px minmax(0,1fr) auto;padding:10px}
+  .hrow .d{font-size:13px}
+  .frow{grid-template-columns:minmax(0,1fr) 92px 44px}
+  .icon-x{height:44px}
+  .md{max-height:94dvh;padding:16px 14px 0}
+  .mact{position:sticky;bottom:0;background:var(--bg);display:grid;grid-template-columns:1fr 1fr;padding:10px 0 calc(12px + env(safe-area-inset-bottom,0px));margin-top:10px;border-top:1px solid var(--line)}
+  .mact .left{margin:0}
+  .mact .btn.wa,.mact .btn.primary{grid-column:1/-1;order:-1}
+  .toast{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+}
+@media (max-width:360px){ .tabs button{font-size:10px} .stat strong{font-size:19px} }
+@media (prefers-reduced-motion:no-preference){
+  .md{animation:up .18s ease-out}
+  @keyframes up{from{transform:translateY(16px);opacity:.6}to{transform:none;opacity:1}}
+}
+</style>
+</head>
+<body class="auth-out">
+<p class="boot" id="boot">Carregando…</p>
+<section class="login" id="login" hidden>
+  <div class="lcard" id="lCard">
+    <h1>Diárias Extras</h1>
+    <p class="meta" id="lSub">Entre com seu e-mail e senha.</p>
+    <form id="lForm" novalidate>
+      <label class="fld" id="lNomeWrap" hidden><span>Seu nome</span><input type="text" id="lNome" autocomplete="name"></label>
+      <label class="fld"><span>E-mail</span><input type="email" id="lEmail" autocomplete="username" inputmode="email"></label>
+      <label class="fld"><span>Senha</span><input type="password" id="lSenha" autocomplete="current-password"></label>
+      <p class="lerr" id="lErr" hidden aria-live="polite"></p>
+      <button class="btn primary" type="submit" id="lBtn">Entrar</button>
+    </form>
+    <div class="llinks"><button type="button" class="lnk" id="lEsqueci">Esqueci minha senha</button><button type="button" class="lnk" id="lPrimeiro">Primeiro acesso do gestor</button></div>
+  </div>
+</section>
+<header class="top">
+  <div class="top-in">
+    <div class="logo"><h1>Diárias Extras</h1><small>RH e gerência</small></div>
+    <nav class="tabs" id="tabs" aria-label="Seções"></nav>
+    <button class="conn" id="conn" type="button" aria-label="Minha conta"></button>
+  </div>
+</header>
+<main>
+  <div class="banner" id="banner" hidden></div>
+  <div id="view"></div>
+</main>
+<div class="ov" id="ov" hidden><div class="md" id="md" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script type="module">
+const firebaseConfig = {
+  apiKey: "AIzaSyBIvkw6wF6ARlJOLTkXLvOpuQpxuSs_sA0",
+  authDomain: "extra-7ced3.firebaseapp.com",
+  databaseURL: "https://extra-7ced3-default-rtdb.firebaseio.com",
+  projectId: "extra-7ced3",
+  storageBucket: "extra-7ced3.firebasestorage.app",
+  messagingSenderId: "231169449193",
+  appId: "1:231169449193:web:2555839d66e146d4d9a478"
+};
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, set, update, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const CONFIG_OK = !String(firebaseConfig.apiKey||"").startsWith("COLE");
+let fbApp=null, auth=null, rtdb=null, app2=null, auth2=null;
+if(CONFIG_OK){ fbApp=initializeApp(firebaseConfig); auth=getAuth(fbApp); rtdb=getDatabase(fbApp); }
+
+const DEF_FUNCOES = ["Garçons","Cumim","Serviços gerais","Barman","Sushiman","Cozinha","Caixa","Contagem"].map(n=>({nome:n,valor:0}));
+const DEF_MSG = "Olá, {nome}! Tudo bem?\nAqui é do {restaurante}. Temos uma diária extra para você:\n\n*Função:* {funcao}\n*Data:* {data}\n*Horário:* {horario}\n*Valor:* {valor}\n\nPode confirmar se está disponível?";
+const STATUS = {
+  convidado:{l:"Aguardando resposta",c:"var(--st-convidado)"},
+  confirmado:{l:"Confirmado",c:"var(--st-confirmado)"},
+  realizado:{l:"Realizado",c:"var(--st-realizado)"},
+  pago:{l:"Pago",c:"var(--st-pago)"},
+  recusado:{l:"Recusou",c:"var(--st-recusado)"},
+  cancelado:{l:"Cancelado",c:"var(--st-cancelado)"}
+};
+const ATIVOS = ["convidado","confirmado","realizado","pago"];
+const TABS = [{k:"recrutar",l:"Recrutar"},{k:"painel",l:"Painel"},{k:"historico",l:"Histórico"},{k:"equipe",l:"Equipe"},{k:"ajustes",l:"Ajustes"}];
+const ICONS = {
+  recrutar:'<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7"/><path d="M19 8v6M16 11h6"/>',
+  painel:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  historico:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  equipe:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.5 0 4.5 1.8 4.5 4.5"/>',
+  ajustes:'<path d="M4 6h10M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>'
+};
+
+const $ = (s,r=document)=>r.querySelector(s);
+const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n=>String(n).padStart(2,"0");
+const iso = d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const today = ()=>iso(new Date());
+const addDays = (s,n)=>{const d=new Date(s+"T12:00:00");d.setDate(d.getDate()+n);return iso(d);};
+const monthStart = ()=>today().slice(0,8)+"01";
+const monthEnd = ()=>{const d=new Date();return iso(new Date(d.getFullYear(),d.getMonth()+1,0));};
+const cap = s=>s? s.charAt(0).toUpperCase()+s.slice(1):s;
+const fmtData = s=>s? cap(new Date(s+"T12:00:00").toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit"})):"";
+const fmtCurta = s=>s? s.slice(8,10)+"/"+s.slice(5,7)+"/"+s.slice(0,4):"";
+const fmtDT = s=>{ if(!s) return ""; const d=new Date(s); return d.toLocaleDateString("pt-BR")+" "+pad(d.getHours())+":"+pad(d.getMinutes()); };
+const brl = v=>(Number(v)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const digits = s=>String(s||"").replace(/\D/g,"");
+const fmtTel = s=>{const d=digits(s); if(d.length===11) return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`; if(d.length===10) return `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`; return s||"";};
+const waNum = s=>{let d=digits(s); if(d.length<=11) d="55"+d; return d;};
+const genId = p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const norm = s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const firstName = s=>String(s||"").trim().split(/\s+/)[0]||"";
+const byName = (a,b)=>String(a.nome||"").localeCompare(String(b.nome||""),"pt-BR");
+
+const S = { func:[], esc:[], cfg:null, uid:null, email:"", papel:"usuario", names:{}, tab:"recrutar", mode:"connecting", meNome:"", usuarios:[], subs:[], criando:false };
+function cfg(){
+  const c=S.cfg||{};
+  return { restaurante:c.restaurante||"", funcoes:(Array.isArray(c.funcoes)&&c.funcoes.length?c.funcoes:DEF_FUNCOES), mensagem:c.mensagem||DEF_MSG };
+}
+const valorPadrao = f=>{const x=cfg().funcoes.find(z=>z.nome===f);return x?Number(x.valor)||0:0;};
+const ev = acao=>({em:new Date().toISOString(),acao,por:S.uid||null,nome:S.meNome||""});
+const quem = x=>x?(x.nome||((S.usuarios.find(u=>u.id===x.por)||{}).nome)||""):"";
+const solicitante = e=>e.solicitadoPor||quem((e.eventos||[])[0]);
+
+/* Dados: Firebase Realtime Database */
+const limpo = o=>JSON.parse(JSON.stringify(o));
+const obj2arr = v=>v?Object.entries(v).map(([id,d])=>({id,...d})):[];
+async function put(col,id,data){ await set(ref(rtdb,col+"/"+id),limpo(data)); }
+async function patch(col,id,p){ await update(ref(rtdb,col+"/"+id),limpo(p)); }
+async function del(col,id){ await remove(ref(rtdb,col+"/"+id)); }
+async function safe(fn,okMsg){
+  try{ await fn(); if(okMsg) toast(okMsg); return true; }
+  catch(e){
+    const m=String((e&&(e.code||e.message))||"");
+    toast(/permission/i.test(m)?"Você não tem permissão para fazer essa alteração.":"Não foi possível salvar. Verifique a internet e tente de novo.");
+    console.error(e); return false;
+  }
+}
+
+let toastT;
+function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2800);}
+function isGestor(){ return S.mode==="shared"&&S.papel==="gestor"; }
+function tabsVisiveis(){ return isGestor()?TABS:TABS.filter(t=>t.k==="recrutar"||t.k==="painel"); }
+function aplicarAcesso(){ setConn(); if(!tabsVisiveis().some(t=>t.k===S.tab)) go("recrutar"); else { renderTabs(); refresh(); } }
+function renderTabs(){
+  const T=tabsVisiveis(); $("#tabs").style.gridTemplateColumns=`repeat(${T.length},1fr)`;
+  $("#tabs").innerHTML=T.map(t=>`<button data-tab="${t.k}" ${S.tab===t.k?'aria-current="page"':""}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[t.k]}</svg><span>${t.l}</span></button>`).join("");
+}
+function go(tab){ if(S.tab==="ajustes"&&tab!=="ajustes"&&A&&A.sujo&&A.salvar) A.salvar(); if(!tabsVisiveis().some(t=>t.k===tab)) tab="recrutar"; S.tab=tab; renderTabs(); VIEWS[tab].mount($("#view")); VIEWS[tab].update(); window.scrollTo(0,0); }
+function refresh(){ VIEWS[S.tab].update(); }
+function setConn(){
+  const c=$("#conn");
+  c.textContent=S.mode==="shared"?`${S.meNome||S.email} (${isGestor()?"Gestor":"Usuário"})`:"";
+}
+
+function openModal(html){ $("#md").innerHTML=html; $("#ov").hidden=false; }
+function closeModal(){ $("#ov").hidden=true; $("#md").innerHTML=""; $("#md").onclick=null; }
+$("#ov").addEventListener("click",e=>{ if(e.target.id==="ov") closeModal(); });
+$("#conn").addEventListener("click",()=>{ if(S.uid) modalConta(); });
+function modalConta(){
+  openModal(`<h2>Minha conta</h2>
+    <p class="sub">${esc(S.meNome)}<br>${esc(S.email)}<br>Perfil: ${isGestor()?"Gestor":"Usuário"}</p>
+    <div class="mact"><button class="btn left" data-m="cancel">Fechar</button><button class="btn" data-m="senha">Trocar senha</button><button class="btn primary" data-m="sair">Sair</button></div>`);
+  $("#md").onclick=async e=>{
+    const b=e.target.closest("[data-m]"); if(!b) return;
+    const m=b.dataset.m;
+    if(m==="cancel"){ closeModal(); return; }
+    if(m==="senha"){ try{ await sendPasswordResetEmail(auth,S.email); toast("Enviamos um link para trocar a senha em "+S.email); }catch(err){ toast(msgAuth(err)); } return; }
+    if(m==="sair"){ closeModal(); sair(); }
+  };
+}
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("#ov").hidden) closeModal(); });
+
+function armOrRun(btn,fn){
+  if(btn.classList.contains("armed")){ fn(); return; }
+  btn.classList.add("armed"); const old=btn.textContent; btn.textContent="Toque de novo para confirmar";
+  setTimeout(()=>{ if(btn.isConnected){btn.classList.remove("armed");btn.textContent=old;} },3500);
+}
+
+/* Mensagem e WhatsApp */
+function montarMsg(tpl,v){
+  const get=k=>v[norm(k).replace(/\s+/g,"")];
+  return tpl.split("\n").filter(line=>{
+    const m=line.match(/\{([^{}\n]+)\}/g); if(!m) return true;
+    return m.every(k=>{const x=get(k.slice(1,-1)); return x===undefined||String(x).trim()!=="";});
+  }).join("\n").replace(/\{([^{}\n]+)\}/g,(m,k)=>{const x=get(k); return x===undefined?m:x;});
+}
+function varsDe(x){
+  return { nome:firstName(x.nome), funcao:x.funcao||"", data:fmtData(x.data), horario:x.horario||"",
+    valor:Number(x.valor)>0?brl(x.valor):"", restaurante:cfg().restaurante };
+}
+function abrirLink(url){
+  const a=document.createElement("a");
+  a.href=url; a.target="_blank"; a.rel="noopener"; document.body.appendChild(a); a.click(); a.remove();
+}
+function abrirWA(tel,msg){ abrirLink("https://wa.me/"+waNum(tel)+"?text="+encodeURIComponent(msg)); }
+function botoesLigar(src,id,nome){
+  const p=src==="e"?S.esc.find(x=>x.id===id):S.func.find(x=>x.id===id);
+  const tel=p&&digits(p.telefone).length>=10?"tel:+"+waNum(p.telefone):"";
+  return `<a class="btn sm" ${tel?`href="${tel}"`:'role="button"'} data-a="ligar" data-src="${src}" data-id="${esc(id)}" aria-label="Ligar para ${esc(nome)}">Ligar</a>`+
+    `<button class="btn sm wa-out" data-a="wa-ligar" data-src="${src}" data-id="${esc(id)}" aria-label="Ligar pelo WhatsApp para ${esc(nome)}">Ligar no WhatsApp</button>`;
+}
+function contato(src,id,tipo){
+  const p=src==="e"?S.esc.find(x=>x.id===id):S.func.find(x=>x.id===id); if(!p) return;
+  if(digits(p.telefone).length<10){toast("Telefone inválido. Corrija no cadastro da equipe.");return;}
+  if(tipo==="tel") toast("Ligando para "+fmtTel(p.telefone));
+  else abrirLink("https://wa.me/"+waNum(p.telefone));
+  if(tipo==="wa") toast("Na conversa aberta, toque no ícone de telefone para ligar.");
+  if(src==="e") safe(()=>patch("escalas",id,{eventos:[...(p.eventos||[]),ev(tipo==="tel"?"Ligação telefônica":"Ligação pelo WhatsApp")]}));
+}
+function statusPill(st){const s=STATUS[st]||STATUS.convidado;return `<span class="pill" style="--stc:${s.c}">${s.l}</span>`;}
+function statusSelect(e){
+  return `<select data-ch="status" data-id="${esc(e.id)}" aria-label="Status de ${esc(e.nome)}">`+
+    Object.entries(STATUS).map(([k,s])=>`<option value="${k}" ${e.status===k?"selected":""}>${s.l}</option>`).join("")+`</select>`;
+}
+const diariasDe = fid=>S.esc.filter(e=>e.funcionarioId===fid&&(e.status==="realizado"||e.status==="pago")).length;
+
+/* ================= RECRUTAR ================= */
+const R={data:addDays(today(),1),busca:"",fav:false,sel:new Set()};
+const recrutar={
+  mount(el){
+    el.innerHTML=`
+      <div class="vhead"><div><h2>Recrutar para extra</h2><p>Escolha a data, filtre pela função e chame pelo WhatsApp.</p></div></div>
+      <section class="toolbar">
+        <label class="fld"><span>Data do extra</span><input type="date" id="rData" value="${R.data}"></label>
+        <button class="btn tgl" id="rFav" aria-pressed="${R.fav}">★ Só favoritos</button>
+        <label class="fld grow"><span>Buscar</span><input type="search" id="rBusca" placeholder="Nome ou telefone" value="${esc(R.busca)}"></label>
+      </section>
+      <div class="chips" id="rChips" role="group" aria-label="Filtrar por função"></div>
+      <div class="rbar"><p class="meta" id="rMeta"></p></div>
+      <div class="grid" id="rLista"></div>`;
+    $("#rData").addEventListener("change",e=>{R.data=e.target.value||today();this.update();});
+    $("#rBusca").addEventListener("input",e=>{R.busca=e.target.value;this.update();});
+    $("#rFav").addEventListener("click",e=>{R.fav=!R.fav;e.currentTarget.setAttribute("aria-pressed",R.fav);this.update();});
+  },
+  update(){
+    const ativos=S.func.filter(f=>f.ativo!==false);
+    const funcoes=[...new Set([...cfg().funcoes.map(f=>f.nome),...ativos.flatMap(f=>f.funcoes||[])])];
+    $("#rChips").innerHTML=`<button class="chip ${R.sel.size?"":"on"}" data-a="chip-all">Todas</button>`+
+      funcoes.map(n=>`<button class="chip ${R.sel.has(n)?"on":""}" data-a="chip" data-v="${esc(n)}" aria-pressed="${R.sel.has(n)}">${esc(n)}<b>${ativos.filter(f=>(f.funcoes||[]).includes(n)).length}</b></button>`).join("");
+    const q=norm(R.busca), qd=digits(R.busca);
+    const lista=ativos.filter(f=>{
+      if(R.fav&&!f.favorito) return false;
+      if(R.sel.size&&!(f.funcoes||[]).some(x=>R.sel.has(x))) return false;
+      if(q&&!(norm(f.nome).includes(q)||(qd&&digits(f.telefone).includes(qd)))) return false;
+      return true;
+    }).sort((a,b)=>(b.favorito?1:0)-(a.favorito?1:0)||byName(a,b));
+    const naData={}; S.esc.forEach(e=>{ if(e.data===R.data&&ATIVOS.includes(e.status)) naData[e.funcionarioId]=e; });
+    const livres=lista.filter(f=>!naData[f.id]).length;
+    $("#rMeta").textContent=lista.length? `${lista.length} encontrado(s), ${livres} livre(s) em ${fmtData(R.data).toLowerCase()}`:"";
+    const el=$("#rLista");
+    if(!S.func.length){ el.innerHTML=`<div class="empty" style="grid-column:1/-1">Nenhum funcionário cadastrado ainda.<br>${isGestor()?'<button class="btn primary" data-a="novo-func">Cadastrar funcionário</button>':"Peça ao gestor para cadastrar a equipe."}</div>`; return; }
+    if(!lista.length){ el.innerHTML=`<div class="empty" style="grid-column:1/-1">Ninguém com esses filtros. Limpe a busca ou escolha outra função.</div>`; return; }
+    el.innerHTML=lista.map(f=>{
+      const e=naData[f.id], n=diariasDe(f.id);
+      return `<article class="card">
+        <div class="row1">
+          <button class="star ${f.favorito?"on":""}" ${isGestor()?"":"disabled"} data-a="fav" data-id="${esc(f.id)}" aria-label="${f.favorito?"Remover dos":"Adicionar aos"} favoritos" aria-pressed="${!!f.favorito}">★</button>
+          <div class="who"><h3>${esc(f.nome)}</h3><p class="meta">${esc(fmtTel(f.telefone))}</p></div>
+        </div>
+        <div class="tags">${(f.funcoes||[]).map(x=>`<span class="tag ${R.sel.has(x)?"hit":""}">${esc(x)}</span>`).join("")||'<span class="meta">Sem função definida</span>'}</div>
+        ${f.obs?`<div class="fobs card-obs"><strong>Obs.:</strong> ${esc(f.obs)}</div>`:""}
+        <div class="foot">
+          <span class="meta">${n} diária${n===1?"":"s"} feita${n===1?"":"s"}</span>
+          ${e?`<span class="warn">Já escalado(a): ${esc(e.funcao)}</span>`:""}
+        </div>
+        <div class="calls">
+          <button class="btn wa sm full" data-a="convidar" data-id="${esc(f.id)}">Convidar por mensagem</button>
+          ${botoesLigar("f",f.id,f.nome)}
+        </div>
+      </article>`;
+    }).join("");
+  }
+};
+
+function modalEscala({fid,escId}){
+  const e=escId?S.esc.find(x=>x.id===escId):null;
+  const f=S.func.find(x=>x.id===(e?e.funcionarioId:fid));
+  const pessoa=e?{nome:e.nome,telefone:e.telefone,funcoes:f?.funcoes||[]}:f;
+  if(!pessoa) return;
+  const opts=(pessoa.funcoes&&pessoa.funcoes.length)?[...pessoa.funcoes]:cfg().funcoes.map(x=>x.nome);
+  const fn=e?e.funcao:(opts.find(x=>R.sel.has(x))||opts[0]||"");
+  if(fn&&!opts.includes(fn)) opts.unshift(fn);
+  const d0=e?e.data:R.data;
+  const v0=e?e.valor:valorPadrao(fn);
+  openModal(`
+    <h2>${e?"Editar extra":"Convidar para extra"}</h2>
+    <p class="sub">${esc(pessoa.nome)}, ${esc(fmtTel(pessoa.telefone))}</p>
+    ${f&&f.obs?`<div class="fobs"><strong>Obs. do cadastro:</strong> ${esc(f.obs)}</div>`:""}
+    <div class="mgrid">
+      <label class="fld full"><span>Função</span><select id="mFunc">${opts.map(o=>`<option ${o===fn?"selected":""}>${esc(o)}</option>`).join("")}</select></label>
+      <label class="fld"><span>Data</span><input type="date" id="mData" value="${d0}"></label>
+      <label class="fld"><span>Horário</span><input type="text" id="mHora" placeholder="Ex.: 18h às 23h" value="${esc(e?e.horario:"")}"></label>
+      <div class="fld"><span><label for="mValor">Valor combinado (R$)</label></span><input type="number" id="mValor" min="0" step="0.01" inputmode="decimal" value="${v0||""}" aria-describedby="mVHint"><small class="vhint" id="mVHint" aria-live="polite"></small></div>
+      <label class="fld"><span>Observação interna</span><input type="text" id="mObs" value="${esc(e?e.obs:"")}" placeholder="Opcional"></label>
+      <p class="warn full" id="mDup" hidden></p>
+      <label class="fld full"><span>Mensagem do WhatsApp (pode editar)</span><textarea id="mMsg" rows="8"></textarea></label>
+    </div>
+    <div class="mact">
+      <button class="btn left" data-m="cancel">Cancelar</button>
+      ${e?`<button class="btn" data-m="save">Salvar alterações</button><button class="btn wa" data-m="save-wa">Salvar e reenviar</button>`
+         :`<button class="btn" data-m="direto">Escalar como confirmado</button><button class="btn wa" data-m="enviar">Enviar no WhatsApp</button>`}
+    </div>`);
+  let msgEditada=false, valorEditado=!!e;
+  const val=()=>({funcao:$("#mFunc").value,data:$("#mData").value,horario:$("#mHora").value.trim(),valor:Number($("#mValor").value)||0,obs:$("#mObs").value.trim()});
+  const gerar=()=>{
+    const v=val();
+    const pv=valorPadrao(v.funcao), h=$("#mVHint");
+    if(!pv) h.innerHTML=`Sem valor cadastrado para ${esc(v.funcao)}. Defina em Ajustes.`;
+    else if(Math.abs(pv-v.valor)<0.005) h.textContent="Valor cadastrado da função. Pode alterar.";
+    else h.innerHTML=`Cadastrado para ${esc(v.funcao)}: ${brl(pv)} <button type="button" data-m="usarv">Usar este valor</button>`;
+    if(!msgEditada) $("#mMsg").value=montarMsg(cfg().mensagem,varsDe({...v,nome:pessoa.nome}));
+    const alvo=e?e.funcionarioId:fid;
+    const dup=S.esc.find(x=>x.id!==escId&&x.funcionarioId===alvo&&x.data===v.data&&ATIVOS.includes(x.status));
+    const w=$("#mDup"); w.hidden=!dup; if(dup) w.textContent=`Atenção: já está escalado(a) nesse dia como ${dup.funcao}.`;
+  };
+  $("#mFunc").addEventListener("change",()=>{ if(!valorEditado){const p=valorPadrao($("#mFunc").value); $("#mValor").value=p||"";} gerar(); });
+  ["mData","mHora","mValor"].forEach(id=>$("#"+id).addEventListener("input",()=>{ if(id==="mValor") valorEditado=true; gerar(); }));
+  $("#mData").addEventListener("change",gerar);
+  $("#mMsg").addEventListener("input",()=>msgEditada=true);
+  gerar();
+  $("#md").onclick=async ev2=>{
+    const b=ev2.target.closest("[data-m]"); if(!b) return;
+    const m=b.dataset.m;
+    if(m==="cancel"){ closeModal(); return; }
+    if(m==="usarv"){ $("#mValor").value=valorPadrao($("#mFunc").value)||""; valorEditado=false; gerar(); return; }
+    const v=val();
+    if(!v.funcao||!v.data){ toast("Informe a função e a data."); return; }
+    const msg=$("#mMsg").value;
+    const enviar=(m==="enviar"||m==="save-wa");
+    if(enviar&&digits(pessoa.telefone).length<10){ toast("Telefone inválido. Corrija no cadastro da equipe."); return; }
+    if(enviar) abrirWA(pessoa.telefone,msg);
+    if(e){
+      const eventos=[...(e.eventos||[]),ev(m==="save-wa"?"Editado e convite reenviado por WhatsApp":"Editado")];
+      if(await safe(()=>patch("escalas",e.id,{...v,eventos}),"Extra atualizado")) closeModal();
+    }else{
+      const data={funcionarioId:f.id,nome:f.nome,telefone:f.telefone||"",...v,
+        status:m==="enviar"?"convidado":"confirmado",criadoEm:new Date().toISOString(),criadoPor:S.uid||null,solicitadoPor:S.meNome||"",
+        eventos:[ev(m==="enviar"?"Convite enviado por WhatsApp":"Escalado como confirmado (sem mensagem)")]};
+      if(await safe(()=>put("escalas",genId("e"),data),m==="enviar"?"Convite registrado no painel":"Extra escalado")) closeModal();
+    }
+  };
+}
+
+/* ================= PAINEL ================= */
+const P={de:today(),ate:addDays(today(),6),st:"ativos",q:"7"};
+const painel={
+  mount(el){
+    el.innerHTML=`
+      <div class="vhead"><div><h2>Extras escalados</h2><p>Quem vem, em qual função e quanto foi combinado.</p></div></div>
+      <section class="toolbar">
+        <div class="seg full" id="pQuick"><button data-q="hoje">Hoje</button><button data-q="7">7 dias</button><button data-q="mes">Este mês</button></div>
+        <label class="fld"><span>De</span><input type="date" id="pDe" value="${P.de}"></label>
+        <label class="fld"><span>Até</span><input type="date" id="pAte" value="${P.ate}"></label>
+        <label class="fld full"><span>Mostrar</span><select id="pSt">
+          <option value="ativos">Escalados (sem recusas e cancelamentos)</option><option value="todos">Todos os status</option>
+          ${Object.entries(STATUS).map(([k,s])=>`<option value="${k}">${s.l}</option>`).join("")}</select></label>
+      </section>
+      <div class="stats" id="pStats"></div>
+      <div class="split"><aside class="box" id="pFunc"></aside><div id="pLista"></div></div>`;
+    $("#pSt").value=P.st;
+    const marcar=()=>[...$("#pQuick").children].forEach(b=>b.classList.toggle("on",b.dataset.q===P.q));
+    marcar();
+    $("#pQuick").addEventListener("click",e=>{
+      const b=e.target.closest("[data-q]"); if(!b) return; P.q=b.dataset.q;
+      if(P.q==="hoje"){P.de=today();P.ate=today();} else if(P.q==="7"){P.de=today();P.ate=addDays(today(),6);} else {P.de=monthStart();P.ate=monthEnd();}
+      $("#pDe").value=P.de; $("#pAte").value=P.ate; marcar(); this.update();
+    });
+    $("#pDe").addEventListener("change",e=>{P.de=e.target.value;P.q="";marcar();this.update();});
+    $("#pAte").addEventListener("change",e=>{P.ate=e.target.value;P.q="";marcar();this.update();});
+    $("#pSt").addEventListener("change",e=>{P.st=e.target.value;this.update();});
+  },
+  update(){
+    const noPeriodo=S.esc.filter(e=>(!P.de||e.data>=P.de)&&(!P.ate||e.data<=P.ate));
+    const vis=noPeriodo.filter(e=>P.st==="todos"?true:P.st==="ativos"?ATIVOS.includes(e.status):e.status===P.st);
+    const at=noPeriodo.filter(e=>ATIVOS.includes(e.status));
+    const conf=at.filter(e=>e.status!=="convidado").length;
+    const agu=at.filter(e=>e.status==="convidado").length;
+    const tot=at.reduce((s,e)=>s+(Number(e.valor)||0),0);
+    $("#pStats").innerHTML=`
+      <div class="stat"><span>Extras escalados</span><strong>${at.length}</strong></div>
+      <div class="stat"><span>Confirmados</span><strong>${conf}</strong></div>
+      <div class="stat"><span>Aguardando resposta</span><strong>${agu}</strong></div>
+      <div class="stat"><span>Valor combinado</span><strong>${brl(tot)}</strong></div>`;
+    const pf={}; at.forEach(e=>{pf[e.funcao]=pf[e.funcao]||{q:0,v:0};pf[e.funcao].q++;pf[e.funcao].v+=Number(e.valor)||0;});
+    const rows=Object.entries(pf).sort((a,b)=>b[1].v-a[1].v);
+    $("#pFunc").innerHTML=`<h3>Por função</h3>`+(rows.length?`<div class="tbl-wrap"><table>
+      <thead><tr><th>Função</th><th class="n">Qtd</th><th class="n">Valor</th></tr></thead>
+      <tbody>${rows.map(([k,x])=>`<tr><td>${esc(k)}</td><td class="n">${x.q}</td><td class="n">${brl(x.v)}</td></tr>`).join("")}</tbody>
+      <tfoot><tr><td>Total</td><td class="n">${at.length}</td><td class="n">${brl(tot)}</td></tr></tfoot></table></div>`
+      :`<p class="meta">Nenhum extra no período.</p>`);
+    const el=$("#pLista");
+    if(!vis.length){ el.innerHTML=`<div class="empty">Nenhum extra nesse período. Vá em Recrutar para chamar alguém.<br><button class="btn primary" data-tab="recrutar">Recrutar</button></div>`; return; }
+    const g={}; vis.forEach(e=>(g[e.data]=g[e.data]||[]).push(e));
+    el.innerHTML=Object.keys(g).sort().map(d=>{
+      const it=g[d].sort((a,b)=>String(a.funcao).localeCompare(String(b.funcao),"pt-BR")||byName(a,b));
+      const vd=it.filter(e=>ATIVOS.includes(e.status)).reduce((s,e)=>s+(Number(e.valor)||0),0);
+      return `<section class="day"><div class="rail"><h3>${esc(fmtData(d))}</h3><span class="bar"></span><span class="meta">${it.length} extra(s), ${brl(vd)}</span></div>
+        <div class="tickets">${it.map(e=>{const s=STATUS[e.status]||STATUS.convidado;return `
+          <article class="ticket ${ATIVOS.includes(e.status)?"":"off"}" style="--stc:${s.c}">
+            <div class="th"><span class="func">${esc(e.funcao)}</span><span class="val">${brl(e.valor)}</span></div>
+            <h4>${esc(e.nome)}</h4>
+            <div class="lines">${e.horario?`<span class="meta">${esc(e.horario)}</span>`:""}<span class="meta">${esc(fmtTel(e.telefone))}</span>${e.obs?`<span class="meta">${esc(e.obs)}</span>`:""}${solicitante(e)?`<span class="meta">Solicitado por ${esc(solicitante(e))}</span>`:""}</div>
+            <div class="calls">${botoesLigar("e",e.id,e.nome)}</div>
+            <div class="acts">${statusSelect(e)}
+              <button class="btn sm wa" data-a="wa-esc" data-id="${esc(e.id)}" aria-label="Reenviar WhatsApp para ${esc(e.nome)}">WhatsApp</button>
+              <button class="btn sm" data-a="edit-esc" data-id="${esc(e.id)}">Editar</button></div>
+          </article>`;}).join("")}</div></section>`;
+    }).join("");
+  }
+};
+
+/* ================= HISTÓRICO ================= */
+const H={de:monthStart(),ate:monthEnd(),q:"",fn:"",st:"",sol:""};
+const historico={
+  mount(el){
+    el.innerHTML=`
+      <div class="vhead"><div><h2>Histórico</h2><p>Todos os extras registrados, com cada alteração e quem fez.</p></div>
+        <button class="btn" id="hCsv">Exportar planilha (CSV)</button></div>
+      <section class="toolbar">
+        <label class="fld"><span>De</span><input type="date" id="hDe" value="${H.de}"></label>
+        <label class="fld"><span>Até</span><input type="date" id="hAte" value="${H.ate}"></label>
+        <label class="fld grow"><span>Funcionário</span><input type="search" id="hQ" value="${esc(H.q)}" placeholder="Buscar nome"></label>
+        <label class="fld"><span>Função</span><select id="hFn"></select></label>
+        <label class="fld"><span>Status</span><select id="hSt"><option value="">Todos</option>${Object.entries(STATUS).map(([k,s])=>`<option value="${k}">${s.l}</option>`).join("")}</select></label>
+        <label class="fld"><span>Solicitado por</span><select id="hSol"></select></label>
+      </section>
+      <div class="stats" id="hStats"></div>
+      <div class="split"><aside class="box" id="hRank"></aside><div class="hlist" id="hLista"></div></div>`;
+    $("#hSt").value=H.st;
+    $("#hDe").addEventListener("change",e=>{H.de=e.target.value;this.update();});
+    $("#hAte").addEventListener("change",e=>{H.ate=e.target.value;this.update();});
+    $("#hQ").addEventListener("input",e=>{H.q=e.target.value;this.update();});
+    $("#hFn").addEventListener("change",e=>{H.fn=e.target.value;this.update();});
+    $("#hSt").addEventListener("change",e=>{H.st=e.target.value;this.update();});
+    $("#hSol").addEventListener("change",e=>{H.sol=e.target.value;this.update();});
+    $("#hCsv").addEventListener("click",()=>exportCsv(this.filtrar()));
+  },
+  filtrar(){
+    const q=norm(H.q);
+    return S.esc.filter(e=>(!H.de||e.data>=H.de)&&(!H.ate||e.data<=H.ate)&&(!q||norm(e.nome).includes(q))&&(!H.fn||e.funcao===H.fn)&&(!H.st||e.status===H.st)&&(!H.sol||solicitante(e)===H.sol))
+      .sort((a,b)=>String(b.data).localeCompare(String(a.data))||String(b.criadoEm||"").localeCompare(String(a.criadoEm||"")));
+  },
+  update(){
+    const fns=[...new Set(S.esc.map(e=>e.funcao).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+    $("#hFn").innerHTML=`<option value="">Todas</option>`+fns.map(f=>`<option ${f===H.fn?"selected":""}>${esc(f)}</option>`).join("");
+    const sols=[...new Set(S.esc.map(solicitante).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+    $("#hSol").innerHTML=`<option value="">Todos</option>`+sols.map(s=>`<option ${s===H.sol?"selected":""}>${esc(s)}</option>`).join("");
+    const abertos=new Set([...document.querySelectorAll("#hLista details[open]")].map(d=>d.dataset.id));
+    const L=this.filtrar();
+    const sum=arr=>arr.reduce((s,e)=>s+(Number(e.valor)||0),0);
+    const feitos=L.filter(e=>e.status==="realizado"||e.status==="pago");
+    $("#hStats").innerHTML=`
+      <div class="stat"><span>Registros</span><strong>${L.length}</strong></div>
+      <div class="stat"><span>Diárias realizadas</span><strong>${feitos.length}</strong></div>
+      <div class="stat"><span>Já pago</span><strong>${brl(sum(L.filter(e=>e.status==="pago")))}</strong></div>
+      <div class="stat"><span>A pagar (realizado)</span><strong>${brl(sum(L.filter(e=>e.status==="realizado")))}</strong></div>`;
+    const pp={}; feitos.forEach(e=>{const k=e.funcionarioId||e.nome;pp[k]=pp[k]||{n:e.nome,q:0,v:0};pp[k].q++;pp[k].v+=Number(e.valor)||0;});
+    const rk=Object.values(pp).sort((a,b)=>b.q-a.q||b.v-a.v);
+    $("#hRank").innerHTML=`<h3>Diárias por pessoa</h3>`+(rk.length?`<div class="tbl-wrap"><table><thead><tr><th>Nome</th><th class="n">Diárias</th><th class="n">Total</th></tr></thead>
+      <tbody>${rk.map(x=>`<tr><td>${esc(x.n)}</td><td class="n">${x.q}</td><td class="n">${brl(x.v)}</td></tr>`).join("")}</tbody></table></div>`
+      :`<p class="meta">Marque os extras como “Realizado” ou “Pago” no painel para aparecerem aqui.</p>`);
+    const el=$("#hLista");
+    if(!L.length){ el.innerHTML=`<div class="empty">Nenhum registro com esses filtros.</div>`; return; }
+    el.innerHTML=L.map(e=>`
+      <details class="hrow" data-id="${esc(e.id)}" ${abertos.has(e.id)?"open":""}><summary>
+        <span class="d">${fmtCurta(e.data)}</span>
+        <span class="nm"><strong>${esc(e.nome)}</strong><span class="meta">${esc(e.funcao)}${e.horario?", "+esc(e.horario):""}</span>${solicitante(e)?`<span class="meta">Solicitado por ${esc(solicitante(e))}</span>`:""}</span>
+        <span class="rt"><b>${brl(e.valor)}</b>${statusPill(e.status)}</span>
+      </summary>
+      <div class="log"><ol>${(e.eventos||[]).map(x=>`<li><time>${fmtDT(x.em)}</time> ${esc(x.acao)}${quem(x)?", por "+esc(quem(x)):""}</li>`).join("")||"<li>Sem registros de alteração.</li>"}</ol>
+      ${e.obs?`<p class="meta" style="margin-top:6px">Obs.: ${esc(e.obs)}</p>`:""}</div></details>`).join("");
+  }
+};
+function exportCsv(L){
+  if(!L.length){ toast("Nada para exportar."); return; }
+  const q=s=>'"'+String(s??"").replace(/"/g,'""')+'"';
+  const lines=[["Data","Funcionário","Telefone","Função","Horário","Valor","Status","Observação","Solicitado por"].join(";")]
+    .concat(L.map(e=>[fmtCurta(e.data),e.nome,fmtTel(e.telefone),e.funcao,e.horario,(Number(e.valor)||0).toFixed(2).replace(".",","),(STATUS[e.status]||{}).l,e.obs,solicitante(e)].map(q).join(";")));
+  const blob=new Blob(["\uFEFF"+lines.join("\n")],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download=`historico-extras-${H.de||"inicio"}-a-${H.ate||"hoje"}.csv`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),3000);
+}
+
+/* ================= EQUIPE ================= */
+const E={q:"",inativos:false};
+const equipe={
+  mount(el){
+    el.innerHTML=`
+      <div class="vhead"><div><h2>Equipe de extras</h2><p>Cadastre quem faz diárias e marque todas as funções que a pessoa sabe fazer.</p></div>
+        <button class="btn primary" data-a="novo-func">Novo funcionário</button></div>
+      <section class="toolbar">
+        <label class="fld grow"><span>Buscar</span><input type="search" id="eQ" value="${esc(E.q)}" placeholder="Nome, telefone ou função"></label>
+        <label class="check" style="min-height:40px"><input type="checkbox" id="eIn" ${E.inativos?"checked":""}> Mostrar inativos</label>
+      </section>
+      <p class="meta" id="eMeta" style="margin-bottom:10px"></p>
+      <div class="list" id="eLista"></div>`;
+    $("#eQ").addEventListener("input",e=>{E.q=e.target.value;this.update();});
+    $("#eIn").addEventListener("change",e=>{E.inativos=e.target.checked;this.update();});
+  },
+  update(){
+    const q=norm(E.q), qd=digits(E.q);
+    const L=S.func.filter(f=>(E.inativos||f.ativo!==false)&&(!q||norm(f.nome).includes(q)||(f.funcoes||[]).some(x=>norm(x).includes(q))||(qd&&digits(f.telefone).includes(qd))))
+      .sort((a,b)=>(b.favorito?1:0)-(a.favorito?1:0)||byName(a,b));
+    $("#eMeta").textContent=`${S.func.filter(f=>f.ativo!==false).length} ativo(s), ${S.func.filter(f=>f.favorito).length} favorito(s)`;
+    const el=$("#eLista");
+    if(!S.func.length){ el.innerHTML=`<div class="empty">Comece cadastrando quem costuma fazer extras.<br><button class="btn primary" data-a="novo-func">Novo funcionário</button></div>`; return; }
+    if(!L.length){ el.innerHTML=`<div class="empty">Ninguém encontrado.</div>`; return; }
+    el.innerHTML=L.map(f=>`
+      <div class="prow ${f.ativo===false?"inativo":""}">
+        <button class="star ${f.favorito?"on":""}" data-a="fav" data-id="${esc(f.id)}" aria-label="Favorito" aria-pressed="${!!f.favorito}">★</button>
+        <div class="who"><h3 style="font-size:17px">${esc(f.nome)}${f.ativo===false?' <span class="meta">(inativo)</span>':""}</h3><p class="meta">${esc(fmtTel(f.telefone))}, ${diariasDe(f.id)} diária(s)</p></div>
+        <div class="tags">${(f.funcoes||[]).map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
+        ${f.obs?`<div class="fobs card-obs"><strong>Obs.:</strong> ${esc(f.obs)}</div>`:""}
+        <div class="pbtns">${botoesLigar("f",f.id,f.nome)}<button class="btn sm" data-a="edit-func" data-id="${esc(f.id)}">Editar</button></div>
+      </div>`).join("");
+  }
+};
+function modalFunc(fid){
+  const f=fid?S.func.find(x=>x.id===fid):null;
+  const sel=new Set(f?.funcoes||[]);
+  const todas=[...new Set([...cfg().funcoes.map(x=>x.nome),...sel])];
+  openModal(`
+    <h2>${f?"Editar funcionário":"Novo funcionário"}</h2>
+    <p class="sub">As funções marcadas aparecem nos filtros do Recrutar.</p>
+    <div class="mgrid">
+      <label class="fld full"><span>Nome completo</span><input type="text" id="fNome" value="${esc(f?.nome)}" autocomplete="off"></label>
+      <label class="fld full"><span>WhatsApp (com DDD)</span><input type="tel" id="fTel" value="${esc(fmtTel(f?.telefone))}" placeholder="(75) 99999-9999" inputmode="tel"></label>
+      <div class="fld full"><span>Funções (marque quantas quiser)</span><div class="fchips" id="fFns">${todas.map(n=>`<button type="button" class="chip ${sel.has(n)?"on":""}" data-v="${esc(n)}" aria-pressed="${sel.has(n)}">${esc(n)}</button>`).join("")}</div>
+        <span class="meta">Falta alguma função? Adicione em Ajustes.</span></div>
+      <label class="check"><input type="checkbox" id="fFav" ${f?.favorito?"checked":""}> Favorito</label>
+      <label class="check"><input type="checkbox" id="fAtivo" ${f?.ativo===false?"":"checked"}> Ativo</label>
+      <label class="fld full"><span>Observações</span><textarea id="fObs" rows="3" placeholder="Ex.: disponível só à noite">${esc(f?.obs)}</textarea></label>
+    </div>
+    <div class="mact">
+      ${f?`<button class="btn danger left" data-m="del">Excluir</button>`:""}
+      <button class="btn ${f?"":"left"}" data-m="cancel">Cancelar</button>
+      <button class="btn primary" data-m="save">Salvar</button>
+    </div>`);
+  $("#fFns").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;const v=b.dataset.v;sel.has(v)?sel.delete(v):sel.add(v);b.classList.toggle("on",sel.has(v));b.setAttribute("aria-pressed",sel.has(v));});
+  $("#md").onclick=async e=>{
+    const b=e.target.closest("[data-m]"); if(!b) return;
+    const m=b.dataset.m;
+    if(m==="cancel"){closeModal();return;}
+    if(m==="del"){ armOrRun(b,async()=>{ if(await safe(()=>del("funcionarios",f.id),"Funcionário excluído. O histórico dele continua salvo.")) closeModal(); }); return; }
+    const nome=$("#fNome").value.trim(), tel=digits($("#fTel").value);
+    if(!nome){toast("Informe o nome.");return;}
+    if(tel.length<10){toast("Informe o WhatsApp com DDD.");return;}
+    const data={nome,telefone:tel,funcoes:[...sel],favorito:$("#fFav").checked,ativo:$("#fAtivo").checked,obs:$("#fObs").value.trim(),
+      criadoEm:f?.criadoEm||new Date().toISOString(),atualizadoEm:new Date().toISOString()};
+    if(await safe(()=>put("funcionarios",f?f.id:genId("f"),data),f?"Cadastro atualizado":"Funcionário cadastrado")) closeModal();
+  };
+}
+
+/* ================= AJUSTES ================= */
+let A=null;
+const ajustes={
+  mount(el){
+    const c=cfg(); A={funcoes:c.funcoes.map(x=>({...x})),sujo:false,base:JSON.stringify(S.cfg||null)};
+    el.innerHTML=`
+      <div class="vhead"><div><h2>Ajustes</h2><p>Funções, valores de referência e a mensagem padrão do WhatsApp.</p></div>
+        <button class="btn primary" id="aSave">Salvar ajustes</button></div>
+      <section class="form-sec">
+        <h3>Restaurante</h3>
+        <label class="fld"><span>Nome que aparece na mensagem</span><input type="text" id="aRest" value="${esc(c.restaurante)}" placeholder="Nome do restaurante ou unidade"></label>
+      </section>
+      <section class="form-sec">
+        <h3>Funções e valor da diária</h3>
+        <p class="meta">Esse valor entra automaticamente no convite ao recrutar, e pode ser alterado em cada extra.</p>
+        <div id="aFns" class="list"></div>
+        <button class="btn" id="aAdd" style="align-self:flex-start">Adicionar função</button>
+      </section>
+      <section class="form-sec">
+        <h3>Mensagem padrão</h3>
+        <p class="meta">Toque para inserir um campo. Linhas com campos vazios (por exemplo, sem horário) são removidas sozinhas.</p>
+        <div class="ph">${["nome","funcao","data","horario","valor","restaurante"].map(k=>`<button class="btn sm" data-ph="${k}">{${k}}</button>`).join("")}</div>
+        <textarea id="aMsg" rows="10">${esc(c.mensagem)}</textarea>
+        <button class="btn sm" id="aReset" style="align-self:flex-start">Voltar à mensagem original</button>
+        <span class="meta">Prévia</span>
+        <div class="preview" id="aPrev"></div>
+      </section>
+      <section class="form-sec">
+        <h3>Acessos</h3>
+        <p class="meta">Usuários veem só Recrutar e Painel. Gestores veem todas as abas. Desative quem sair da equipe.</p>
+        <div class="mgrid">
+          <label class="fld"><span>Nome</span><input type="text" id="uNome" autocomplete="off"></label>
+          <label class="fld"><span>E-mail</span><input type="email" id="uEmail" autocomplete="off" inputmode="email"></label>
+          <label class="fld"><span>Senha inicial</span><input type="text" id="uSenha" autocomplete="off" placeholder="Mínimo 6 caracteres"></label>
+          <label class="fld"><span>Perfil</span><select id="uPapel"><option value="usuario">Usuário</option><option value="gestor">Gestor</option></select></label>
+          <button class="btn primary full" id="uCriar" type="button">Criar acesso</button>
+        </div>
+        <div id="aAcessos" class="blist"></div>
+      </section>
+      <div class="savebar" id="aBar"><span>Alterações não salvas</span><button class="btn primary" id="aSave2">Salvar ajustes</button></div>`;
+    const prev=()=>{const f0=A.funcoes.find(x=>x.nome)||{nome:"Garçom/Garçonete",valor:0};
+      $("#aPrev").textContent=montarMsg($("#aMsg").value,{nome:"Joana",funcao:f0.nome,data:fmtData(addDays(today(),1)),horario:"18h às 23h",valor:Number(f0.valor)>0?brl(f0.valor):"",restaurante:$("#aRest").value.trim()});};
+    const drawFns=()=>{
+      $("#aFns").innerHTML=A.funcoes.map((x,i)=>`<div class="frow">
+        <input type="text" data-i="${i}" data-k="nome" value="${esc(x.nome)}" aria-label="Nome da função" placeholder="Nome da função">
+        <input type="number" data-i="${i}" data-k="valor" value="${Number(x.valor)||""}" min="0" step="0.01" placeholder="R$" aria-label="Valor de referência">
+        <button class="icon-x" data-rm="${i}" aria-label="Remover ${esc(x.nome)}">×</button></div>`).join("");
+    };
+    drawFns(); prev();
+    const sync=()=>{const b=$("#aBar"); if(b) b.classList.toggle("on",!!A.sujo);};
+    el.addEventListener("input",sync); el.addEventListener("click",()=>setTimeout(sync));
+    el.addEventListener("change",async e=>{
+      const p=e.target.closest("[data-papel]");
+      if(p){ await safe(()=>patch("usuarios",p.dataset.papel,{papel:p.value}),"Perfil atualizado"); return; }
+      const a=e.target.closest("[data-ativo]");
+      if(a){ await safe(()=>patch("usuarios",a.dataset.ativo,{ativo:a.checked}),a.checked?"Acesso reativado":"Acesso desativado"); }
+    });
+    el.addEventListener("click",async e=>{
+      const r=e.target.closest("[data-reset]");
+      if(r){ if(!r.dataset.reset){ toast("Usuário sem e-mail."); return; }
+        try{ await sendPasswordResetEmail(auth,r.dataset.reset); toast("Link para nova senha enviado para "+r.dataset.reset); }catch(err){ toast(msgAuth(err)); }
+        return; }
+      if(e.target.closest("#uCriar")) criarUsuario();
+    });
+    $("#aFns").addEventListener("input",e=>{const t=e.target;if(t.dataset.i==null)return;A.funcoes[+t.dataset.i][t.dataset.k]=t.dataset.k==="valor"?(Number(t.value)||0):t.value;A.sujo=true;prev();});
+    $("#aFns").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(!b)return;A.funcoes.splice(+b.dataset.rm,1);A.sujo=true;drawFns();prev();});
+    $("#aAdd").addEventListener("click",()=>{A.funcoes.push({nome:"",valor:0});A.sujo=true;drawFns();const ins=$("#aFns").querySelectorAll('input[data-k="nome"]');ins[ins.length-1].focus();});
+    $("#aRest").addEventListener("input",()=>{A.sujo=true;prev();});
+    $("#aMsg").addEventListener("input",()=>{A.sujo=true;prev();});
+    $("#aReset").addEventListener("click",()=>{$("#aMsg").value=DEF_MSG;A.sujo=true;prev();});
+    el.querySelector(".ph").addEventListener("click",e=>{
+      const b=e.target.closest("[data-ph]");if(!b)return;const t=$("#aMsg");const s=t.selectionStart??t.value.length;const en=t.selectionEnd??s;
+      const ins="{"+b.dataset.ph+"}";t.value=t.value.slice(0,s)+ins+t.value.slice(en);t.focus();t.selectionStart=t.selectionEnd=s+ins.length;A.sujo=true;prev();
+    });
+    const salvar=async()=>{
+      const fns=[];const seen=new Set();
+      A.funcoes.forEach(x=>{const n=String(x.nome||"").trim();if(n&&!seen.has(n)){seen.add(n);fns.push({nome:n,valor:Number(x.valor)||0});}});
+      if(!fns.length){toast("Cadastre pelo menos uma função.");return;}
+      const data={restaurante:$("#aRest").value.trim(),funcoes:fns,mensagem:$("#aMsg").value.trim()||DEF_MSG,atualizadoEm:new Date().toISOString()};
+      if(await safe(()=>put("config","geral",data),"Ajustes salvos")){A.sujo=false;A.funcoes=fns.map(x=>({...x}));A.base=JSON.stringify(data);sync();}
+    };
+    A.salvar=salvar;
+    $("#aSave").addEventListener("click",salvar);
+    $("#aSave2").addEventListener("click",salvar);
+  },
+  update(){
+    renderAcessos();
+    if(!A||A.sujo) return;
+    const atual=JSON.stringify(S.cfg||null);
+    if(atual!==A.base&&!$("#view").contains(document.activeElement)) this.mount($("#view"));
+  }
+};
+
+function renderAcessos(){
+  const box=$("#aAcessos"); if(!box) return;
+  const L=[...S.usuarios].sort(byName);
+  box.innerHTML=L.map(u=>{const eu=u.id===S.uid;
+    return `<div class="brow urow ${u.ativo===false?"inativo":""}">
+      <div class="who"><strong>${esc(u.nome||"Sem nome")}${eu?" (você)":""}</strong><span class="meta">${esc(u.email||"")}</span><span class="meta">Último acesso: ${u.ultimoAcesso?esc(fmtDT(u.ultimoAcesso)):"ainda não entrou"}</span></div>
+      <div class="uctl">
+        <select data-papel="${esc(u.id)}" ${eu?"disabled":""} aria-label="Perfil de ${esc(u.nome)}"><option value="usuario" ${u.papel!=="gestor"?"selected":""}>Usuário</option><option value="gestor" ${u.papel==="gestor"?"selected":""}>Gestor</option></select>
+        <label class="check"><input type="checkbox" data-ativo="${esc(u.id)}" ${u.ativo!==false?"checked":""} ${eu?"disabled":""}> Ativo</label>
+        <button class="btn sm" type="button" data-reset="${esc(u.email||"")}">Redefinir senha</button>
+      </div></div>`;}).join("")||`<p class="meta">Nenhum usuário cadastrado.</p>`;
+}
+async function criarUsuario(){
+  const nome=$("#uNome").value.trim(), email=$("#uEmail").value.trim().toLowerCase(), senha=$("#uSenha").value, papel=$("#uPapel").value;
+  if(!nome||!email){ toast("Informe nome e e-mail."); return; }
+  if(senha.length<6){ toast("A senha inicial precisa ter pelo menos 6 caracteres."); return; }
+  const b=$("#uCriar"); b.disabled=true; b.textContent="Criando…";
+  try{
+    if(!auth2){ app2=initializeApp(firebaseConfig,"cadastro"); auth2=getAuth(app2); }
+    const cred=await createUserWithEmailAndPassword(auth2,email,senha);
+    await signOut(auth2);
+    await put("usuarios",cred.user.uid,{nome,email,papel,ativo:true,criadoEm:new Date().toISOString(),criadoPor:S.meNome||""});
+    ["uNome","uEmail","uSenha"].forEach(i=>$("#"+i).value="");
+    toast("Acesso criado. Passe o e-mail e a senha para "+firstName(nome)+".");
+  }catch(err){ console.error(err); toast(msgAuth(err)); }
+  finally{ b.disabled=false; b.textContent="Criar acesso"; }
+}
+
+const VIEWS={recrutar,painel,historico,equipe,ajustes};
+
+const ACTIONS={
+  "chip-all":()=>{R.sel.clear();recrutar.update();},
+  "chip":(id,b)=>{const v=b.dataset.v;R.sel.has(v)?R.sel.delete(v):R.sel.add(v);recrutar.update();},
+  "fav":id=>{if(!isGestor())return;const f=S.func.find(x=>x.id===id);if(f) safe(()=>patch("funcionarios",id,{favorito:!f.favorito}));},
+  "convidar":id=>modalEscala({fid:id}),
+  "ligar":(id,b)=>contato(b.dataset.src,id,"tel"),
+  "wa-ligar":(id,b)=>contato(b.dataset.src,id,"wa"),
+  "novo-func":()=>modalFunc(null),
+  "edit-func":id=>modalFunc(id),
+  "edit-esc":id=>modalEscala({escId:id}),
+  "wa-esc":id=>{
+    const e=S.esc.find(x=>x.id===id); if(!e) return;
+    if(digits(e.telefone).length<10){toast("Telefone inválido.");return;}
+    abrirWA(e.telefone,montarMsg(cfg().mensagem,varsDe(e)));
+    safe(()=>patch("escalas",id,{eventos:[...(e.eventos||[]),ev("Mensagem reenviada por WhatsApp")]}));
+  }
+};
+document.addEventListener("click",e=>{
+  if(e.target.closest("#md")) return;
+  const t=e.target.closest("[data-tab]"); if(t){ go(t.dataset.tab); return; }
+  const b=e.target.closest("[data-a]"); if(!b) return;
+  ACTIONS[b.dataset.a]?.(b.dataset.id,b,e);
+});
+document.addEventListener("change",async e=>{
+  const s=e.target.closest('[data-ch="status"]'); if(!s) return;
+  const x=S.esc.find(z=>z.id===s.dataset.id); if(!x||x.status===s.value) return;
+  const st=s.value;
+  await safe(()=>patch("escalas",x.id,{status:st,eventos:[...(x.eventos||[]),ev("Status alterado para "+STATUS[st].l)]}),"Status: "+STATUS[st].l);
+});
+
+/* ================= LOGIN ================= */
+function msgAuth(e){
+  const c=(e&&e.code)||"";
+  return ({"auth/invalid-credential":"E-mail ou senha incorretos.","auth/wrong-password":"E-mail ou senha incorretos.","auth/user-not-found":"E-mail ou senha incorretos.",
+    "auth/invalid-email":"E-mail inválido.","auth/missing-email":"Digite o e-mail.","auth/missing-password":"Digite a senha.","auth/email-already-in-use":"Já existe um acesso com esse e-mail.",
+    "auth/weak-password":"A senha precisa ter pelo menos 6 caracteres.","auth/too-many-requests":"Muitas tentativas. Aguarde alguns minutos.",
+    "auth/network-request-failed":"Sem conexão com a internet.","auth/operation-not-allowed":"Ative o login por E-mail/senha no Firebase."})[c]||"Não foi possível concluir. Tente de novo.";
+}
+function avisoLogin(msg,ok){ const p=$("#lErr"); p.hidden=!msg; p.textContent=msg||""; p.classList.toggle("ok",!!ok); }
+function telaLogin(msg){ $("#boot").hidden=true; document.body.classList.add("auth-out"); $("#login").hidden=false; avisoLogin(msg); }
+function telaApp(){ $("#boot").hidden=true; $("#login").hidden=true; document.body.classList.remove("auth-out"); }
+let modoPrimeiro=false;
+$("#lPrimeiro").addEventListener("click",()=>{
+  modoPrimeiro=!modoPrimeiro; avisoLogin("");
+  $("#lNomeWrap").hidden=!modoPrimeiro;
+  $("#lBtn").textContent=modoPrimeiro?"Criar conta de gestor":"Entrar";
+  $("#lPrimeiro").textContent=modoPrimeiro?"Voltar para o login":"Primeiro acesso do gestor";
+  $("#lSub").textContent=modoPrimeiro?"Use só na primeira vez, para criar a conta do gestor principal. Os demais acessos são criados por ele em Ajustes.":"Entre com seu e-mail e senha.";
+  $("#lSenha").setAttribute("autocomplete",modoPrimeiro?"new-password":"current-password");
+});
+$("#lEsqueci").addEventListener("click",async()=>{
+  const em=$("#lEmail").value.trim();
+  if(!em){ avisoLogin("Digite seu e-mail no campo acima e toque de novo em Esqueci minha senha."); return; }
+  try{ await sendPasswordResetEmail(auth,em); avisoLogin("Se o e-mail estiver cadastrado, você vai receber um link para criar uma nova senha.",true); }
+  catch(err){ avisoLogin(msgAuth(err)); }
+});
+$("#lForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const email=$("#lEmail").value.trim().toLowerCase(), senha=$("#lSenha").value, btn=$("#lBtn");
+  if(!email||!senha){ avisoLogin("Digite e-mail e senha."); return; }
+  btn.disabled=true; avisoLogin("");
+  try{
+    if(!modoPrimeiro){ await signInWithEmailAndPassword(auth,email,senha); return; }
+    const nome=$("#lNome").value.trim();
+    if(!nome){ avisoLogin("Digite seu nome."); return; }
+    S.criando=true;
+    const cred=await createUserWithEmailAndPassword(auth,email,senha);
+    try{ await set(ref(rtdb,"usuarios/"+cred.user.uid),{nome,email,papel:"gestor",ativo:true,criadoEm:new Date().toISOString()}); }
+    catch(err){
+      await cred.user.delete().catch(()=>{}); await signOut(auth).catch(()=>{}); S.criando=false;
+      avisoLogin("O gestor principal já foi criado. Peça seu acesso a ele."); return;
+    }
+    S.criando=false; await entrar(cred.user);
+  }catch(err){ S.criando=false; console.error(err); avisoLogin(msgAuth(err)); }
+  finally{ btn.disabled=false; }
+});
+
+function pararOuvir(){ S.subs.forEach(u=>{ try{u();}catch(_){} }); S.subs=[]; }
+function ouvir(){
+  pararOuvir();
+  const ouvirNo=(path,fn)=>S.subs.push(onValue(ref(rtdb,path),s=>fn(s.val()),err=>console.error(path,err)));
+  ouvirNo("funcionarios",v=>{S.func=obj2arr(v);refresh();});
+  ouvirNo("escalas",v=>{S.esc=obj2arr(v);refresh();});
+  ouvirNo("config/geral",v=>{S.cfg=v||null;refresh();});
+  ouvirNo("usuarios",v=>{
+    S.usuarios=obj2arr(v);
+    const me=S.usuarios.find(u=>u.id===S.uid);
+    if(!me||me.ativo===false){ sair("Seu acesso está desativado. Fale com o gestor."); return; }
+    S.papel=me.papel||"usuario"; S.meNome=me.nome||S.email;
+    aplicarAcesso();
+  });
+}
+async function entrar(u){
+  S.uid=u.uid; S.email=u.email||"";
+  let me=null;
+  try{ me=(await get(ref(rtdb,"usuarios/"+u.uid))).val(); }catch(err){ console.error(err); }
+  if(!me||me.ativo===false){
+    await signOut(auth).catch(()=>{});
+    telaLogin(!me?"Seu acesso ainda não foi liberado. Fale com o gestor.":"Seu acesso está desativado. Fale com o gestor.");
+    return;
+  }
+  S.papel=me.papel||"usuario"; S.meNome=me.nome||S.email; S.mode="shared";
+  telaApp(); aplicarAcesso(); ouvir();
+  set(ref(rtdb,"usuarios/"+u.uid+"/ultimoAcesso"),new Date().toISOString()).catch(()=>{});
+}
+async function sair(msg){
+  pararOuvir();
+  Object.assign(S,{func:[],esc:[],cfg:null,usuarios:[],uid:null,email:"",papel:"usuario",meNome:"",mode:"connecting"});
+  closeModal();
+  if(auth) await signOut(auth).catch(()=>{});
+  telaLogin(msg||"");
+}
+
+renderTabs(); go("recrutar"); setConn();
+if(!CONFIG_OK){
+  $("#boot").hidden=true; $("#login").hidden=false;
+  $("#lCard").innerHTML=`<h1>Diárias Extras</h1><p>Falta configurar o Firebase.</p><p class="meta">Abra o arquivo index.html, procure por <b>firebaseConfig</b> no início do código e cole os dados do seu projeto Firebase.</p>`;
+}else{
+  onAuthStateChanged(auth,u=>{
+    if(S.criando) return;
+    if(!u){ if(S.uid) sair(); else telaLogin(""); return; }
+    if(u.uid!==S.uid) entrar(u);
+  });
+}
+</script>
+</body>
+</html>
