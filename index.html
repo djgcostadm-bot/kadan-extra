@@ -287,7 +287,7 @@ a.btn{text-decoration:none;color:inherit}
       <p class="lerr" id="lErr" hidden aria-live="polite"></p>
       <button class="btn primary" type="submit" id="lBtn">Entrar</button>
     </form>
-    <div class="llinks"><button type="button" class="lnk" id="lEsqueci">Esqueci minha senha</button><button type="button" class="lnk" id="lPrimeiro">Primeiro acesso do gestor</button></div>
+    <div class="llinks"><button type="button" class="lnk" id="lEsqueci">Esqueci minha senha</button><button type="button" class="lnk" id="lPrimeiro" hidden>Primeiro acesso do gestor</button></div>
   </div>
 </section>
 <header class="top">
@@ -323,6 +323,8 @@ let fbApp=null, auth=null, rtdb=null, app2=null, auth2=null;
 if(CONFIG_OK){ fbApp=initializeApp(firebaseConfig); auth=getAuth(fbApp); rtdb=getDatabase(fbApp); }
 
 const DEF_FUNCOES = ["Garçons","Cumim","Serviços gerais","Barman","Sushiman","Cozinha","Caixa","Contagem"].map(n=>({nome:n,valor:0}));
+const DEF_FIN_TEL = "75983442716";
+const DEF_FIN_MSG = "Olá, Financeiro! Solicito o pagamento da diária extra abaixo:\n\n*Funcionário:* {nome}\n*Função:* {funcao}\n*Data:* {data}\n*Horário:* {horario}\n*Valor:* {valor}\n*Telefone do funcionário:* {telefone}\n*Unidade:* {restaurante}\n*Solicitado por:* {solicitante}\n\nObrigado!";
 const DEF_MSG = "Olá, {nome}! Tudo bem?\nAqui é do {restaurante}. Temos uma diária extra para você:\n\n*Função:* {funcao}\n*Data:* {data}\n*Horário:* {horario}\n*Valor:* {valor}\n\nPode confirmar se está disponível?";
 const STATUS = {
   convidado:{l:"Aguardando resposta",c:"var(--st-convidado)"},
@@ -366,7 +368,7 @@ const byName = (a,b)=>String(a.nome||"").localeCompare(String(b.nome||""),"pt-BR
 const S = { func:[], esc:[], cfg:null, uid:null, email:"", papel:"usuario", names:{}, tab:"recrutar", mode:"connecting", meNome:"", usuarios:[], subs:[], criando:false };
 function cfg(){
   const c=S.cfg||{};
-  return { restaurante:c.restaurante||"", funcoes:(Array.isArray(c.funcoes)&&c.funcoes.length?c.funcoes:DEF_FUNCOES), mensagem:c.mensagem||DEF_MSG };
+  return { restaurante:c.restaurante||"", funcoes:(Array.isArray(c.funcoes)&&c.funcoes.length?c.funcoes:DEF_FUNCOES), mensagem:c.mensagem||DEF_MSG, finTel:(c.finTel!=null?c.finTel:DEF_FIN_TEL), finAuto:c.finAuto!==false, finMsg:c.finMsg||DEF_FIN_MSG };
 }
 const valorPadrao = f=>{const x=cfg().funcoes.find(z=>z.nome===f);return x?Number(x.valor)||0:0;};
 const ev = acao=>({em:new Date().toISOString(),acao,por:S.uid||null,nome:S.meNome||""});
@@ -435,6 +437,16 @@ function montarMsg(tpl,v){
     const m=line.match(/\{([^{}\n]+)\}/g); if(!m) return true;
     return m.every(k=>{const x=get(k.slice(1,-1)); return x===undefined||String(x).trim()!=="";});
   }).join("\n").replace(/\{([^{}\n]+)\}/g,(m,k)=>{const x=get(k); return x===undefined?m:x;});
+}
+function varsFin(x){
+  return { nome:x.nome||"", funcao:x.funcao||"", data:fmtData(x.data), horario:x.horario||"", valor:brl(x.valor),
+    telefone:fmtTel(x.telefone), restaurante:cfg().restaurante, solicitante:solicitante(x), obs:x.obs||"" };
+}
+function pedirPagamento(x,auto){
+  const tel=cfg().finTel;
+  if(digits(tel).length<10){ toast("Cadastre o WhatsApp do financeiro em Ajustes."); return false; }
+  abrirWA(tel,montarMsg(cfg().finMsg,varsFin(x)));
+  return true;
 }
 function varsDe(x){
   return { nome:firstName(x.nome), funcao:x.funcao||"", data:fmtData(x.data), horario:x.horario||"",
@@ -655,7 +667,8 @@ const painel={
             <div class="calls">${botoesLigar("e",e.id,e.nome)}</div>
             <div class="acts">${statusSelect(e)}
               <button class="btn sm wa" data-a="wa-esc" data-id="${esc(e.id)}" aria-label="Reenviar WhatsApp para ${esc(e.nome)}">WhatsApp</button>
-              <button class="btn sm" data-a="edit-esc" data-id="${esc(e.id)}">Editar</button></div>
+              <button class="btn sm" data-a="edit-esc" data-id="${esc(e.id)}">Editar</button>
+              ${e.status==="realizado"?`<button class="btn sm wa-out" style="grid-column:1/-1" data-a="pedir-pag" data-id="${esc(e.id)}">${e.pagamentoSolicitadoEm?"Cobrar financeiro de novo":"Pedir pagamento ao financeiro"}</button>`:""}</div>
           </article>`;}).join("")}</div></section>`;
     }).join("");
   }
@@ -832,6 +845,17 @@ const ajustes={
         <div class="preview" id="aPrev"></div>
       </section>
       <section class="form-sec">
+        <h3>Financeiro</h3>
+        <p class="meta">Quando um extra for marcado como Realizado no Painel, o WhatsApp abre com esta mensagem para o financeiro, pedindo o pagamento.</p>
+        <label class="fld"><span>WhatsApp do financeiro (com DDD)</span><input type="tel" id="aFinTel" inputmode="tel" value="${esc(fmtTel(c.finTel))}" placeholder="(75) 98344-2716"></label>
+        <label class="check"><input type="checkbox" id="aFinAuto" ${c.finAuto?"checked":""}> Abrir o WhatsApp do financeiro ao marcar Realizado</label>
+        <div class="ph ph2">${["nome","funcao","data","horario","valor","telefone","restaurante","solicitante","obs"].map(k=>`<button class="btn sm" data-ph2="${k}">{${k}}</button>`).join("")}</div>
+        <textarea id="aFinMsg" rows="11">${esc(c.finMsg)}</textarea>
+        <button class="btn sm" id="aFinReset" style="align-self:flex-start">Voltar à mensagem original</button>
+        <span class="meta">Prévia</span>
+        <div class="preview" id="aFinPrev"></div>
+      </section>
+      <section class="form-sec">
         <h3>Acessos</h3>
         <p class="meta">Usuários veem só Recrutar e Painel. Gestores veem todas as abas. Desative quem sair da equipe.</p>
         <div class="mgrid">
@@ -873,6 +897,16 @@ const ajustes={
     $("#aAdd").addEventListener("click",()=>{A.funcoes.push({nome:"",valor:0});A.sujo=true;drawFns();const ins=$("#aFns").querySelectorAll('input[data-k="nome"]');ins[ins.length-1].focus();});
     $("#aRest").addEventListener("input",()=>{A.sujo=true;prev();});
     $("#aMsg").addEventListener("input",()=>{A.sujo=true;prev();});
+    const prevFin=()=>{ $("#aFinPrev").textContent=montarMsg($("#aFinMsg").value,{nome:"Joana Santos",funcao:(A.funcoes.find(x=>x.nome)||{nome:"Garçons"}).nome,data:fmtData(today()),horario:"18h às 23h",valor:brl(120),telefone:"(75) 99999-0000",restaurante:$("#aRest").value.trim(),solicitante:S.meNome||"Gerente",obs:""}); };
+    prevFin();
+    ["aFinTel","aFinMsg"].forEach(i=>$("#"+i).addEventListener("input",()=>{A.sujo=true;prevFin();}));
+    $("#aFinAuto").addEventListener("change",()=>{A.sujo=true;});
+    $("#aRest").addEventListener("input",prevFin);
+    $("#aFinReset").addEventListener("click",()=>{$("#aFinMsg").value=DEF_FIN_MSG;A.sujo=true;prevFin();});
+    el.querySelector(".ph2").addEventListener("click",e=>{
+      const b=e.target.closest("[data-ph2]");if(!b)return;const t=$("#aFinMsg");const s=t.selectionStart??t.value.length;const en=t.selectionEnd??s;
+      const ins="{"+b.dataset.ph2+"}";t.value=t.value.slice(0,s)+ins+t.value.slice(en);t.focus();t.selectionStart=t.selectionEnd=s+ins.length;A.sujo=true;prevFin();
+    });
     $("#aReset").addEventListener("click",()=>{$("#aMsg").value=DEF_MSG;A.sujo=true;prev();});
     el.querySelector(".ph").addEventListener("click",e=>{
       const b=e.target.closest("[data-ph]");if(!b)return;const t=$("#aMsg");const s=t.selectionStart??t.value.length;const en=t.selectionEnd??s;
@@ -882,7 +916,7 @@ const ajustes={
       const fns=[];const seen=new Set();
       A.funcoes.forEach(x=>{const n=String(x.nome||"").trim();if(n&&!seen.has(n)){seen.add(n);fns.push({nome:n,valor:Number(x.valor)||0});}});
       if(!fns.length){toast("Cadastre pelo menos uma função.");return;}
-      const data={restaurante:$("#aRest").value.trim(),funcoes:fns,mensagem:$("#aMsg").value.trim()||DEF_MSG,atualizadoEm:new Date().toISOString()};
+      const data={restaurante:$("#aRest").value.trim(),funcoes:fns,mensagem:$("#aMsg").value.trim()||DEF_MSG,finTel:digits($("#aFinTel").value),finAuto:$("#aFinAuto").checked,finMsg:$("#aFinMsg").value.trim()||DEF_FIN_MSG,atualizadoEm:new Date().toISOString()};
       if(await safe(()=>put("config","geral",data),"Ajustes salvos")){A.sujo=false;A.funcoes=fns.map(x=>({...x}));A.base=JSON.stringify(data);sync();}
     };
     A.salvar=salvar;
@@ -932,6 +966,10 @@ const ACTIONS={
   "chip":(id,b)=>{const v=b.dataset.v;R.sel.has(v)?R.sel.delete(v):R.sel.add(v);recrutar.update();},
   "fav":id=>{if(!isGestor())return;const f=S.func.find(x=>x.id===id);if(f) safe(()=>patch("funcionarios",id,{favorito:!f.favorito}));},
   "convidar":id=>modalEscala({fid:id}),
+  "pedir-pag":id=>{
+    const x=S.esc.find(z=>z.id===id); if(!x) return;
+    if(pedirPagamento(x)) safe(()=>patch("escalas",id,{pagamentoSolicitadoEm:new Date().toISOString(),eventos:[...(x.eventos||[]),ev("Pagamento solicitado ao financeiro por WhatsApp")]}));
+  },
   "ligar":(id,b)=>contato(b.dataset.src,id,"tel"),
   "wa-ligar":(id,b)=>contato(b.dataset.src,id,"wa"),
   "novo-func":()=>modalFunc(null),
@@ -954,7 +992,12 @@ document.addEventListener("change",async e=>{
   const s=e.target.closest('[data-ch="status"]'); if(!s) return;
   const x=S.esc.find(z=>z.id===s.dataset.id); if(!x||x.status===s.value) return;
   const st=s.value;
-  await safe(()=>patch("escalas",x.id,{status:st,eventos:[...(x.eventos||[]),ev("Status alterado para "+STATUS[st].l)]}),"Status: "+STATUS[st].l);
+  const eventos=[...(x.eventos||[]),ev("Status alterado para "+STATUS[st].l)];
+  const extra={};
+  if(st==="realizado"&&cfg().finAuto&&pedirPagamento({...x,status:st})){
+    eventos.push(ev("Pagamento solicitado ao financeiro por WhatsApp")); extra.pagamentoSolicitadoEm=new Date().toISOString();
+  }
+  await safe(()=>patch("escalas",x.id,{status:st,eventos,...extra}),"Status: "+STATUS[st].l);
 });
 
 /* ================= LOGIN ================= */
@@ -999,7 +1042,9 @@ $("#lForm").addEventListener("submit",async e=>{
       await cred.user.delete().catch(()=>{}); await signOut(auth).catch(()=>{}); S.criando=false;
       avisoLogin("O gestor principal já foi criado. Peça seu acesso a ele."); return;
     }
-    S.criando=false; await entrar(cred.user);
+    S.criando=false; $("#lPrimeiro").hidden=true;
+    await set(ref(rtdb,"sistema/iniciado"),true).catch(()=>{});
+    await entrar(cred.user);
   }catch(err){ S.criando=false; console.error(err); avisoLogin(msgAuth(err)); }
   finally{ btn.disabled=false; }
 });
@@ -1029,6 +1074,8 @@ async function entrar(u){
     return;
   }
   S.papel=me.papel||"usuario"; S.meNome=me.nome||S.email; S.mode="shared";
+  if(S.papel==="gestor"){ get(ref(rtdb,"sistema/iniciado")).then(s=>{ if(s.val()!==true) set(ref(rtdb,"sistema/iniciado"),true).catch(()=>{}); }).catch(()=>{}); }
+  $("#lPrimeiro").hidden=true;
   telaApp(); aplicarAcesso(); ouvir();
   set(ref(rtdb,"usuarios/"+u.uid+"/ultimoAcesso"),new Date().toISOString()).catch(()=>{});
 }
@@ -1045,6 +1092,7 @@ if(!CONFIG_OK){
   $("#boot").hidden=true; $("#login").hidden=false;
   $("#lCard").innerHTML=`<h1>Diárias Extras</h1><p>Falta configurar o Firebase.</p><p class="meta">Abra o arquivo index.html, procure por <b>firebaseConfig</b> no início do código e cole os dados do seu projeto Firebase.</p>`;
 }else{
+  get(ref(rtdb,"sistema/iniciado")).then(s=>{ if(s.val()!==true&&!S.uid) $("#lPrimeiro").hidden=false; }).catch(()=>{});
   onAuthStateChanged(auth,u=>{
     if(S.criando) return;
     if(!u){ if(S.uid) sair(); else telaLogin(""); return; }
